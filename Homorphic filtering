@@ -1,0 +1,34 @@
+clc;
+clear all;
+a=imread('F:\MScIT - II\IPCV-4.1.2-win64-61-bin\IPCV\images\moon.tif');//input image
+subplot(2,3,1), imshow(a), title('input image');
+a=double(a);
+b=a;
+//constant required for the filter 
+D0=50;
+GL=0.9;
+GH=1.9;
+[m,n]=size(a);//size of input image
+
+b=b+1;//add 1 to pixels to remove 0 values which would result in undefined log values
+log_b=log(b);//taking log
+subplot(2,3,2), imshow(log_b), title('Natural logarithm');
+c=fft2(log_b);//taking the fft
+subplot(2,3,3), imshow(uint8(c)), title('Fourier transform');
+dd=fftshift(c);
+for u=1:m
+    for v=1:n
+        H(u,v)=(GH-GL)*(1-exp(-1*(sqrt((u-m/2)^2+(v-n/2)^2))^2/D0)^2)+GL;
+    end
+end
+
+subplot(2,3,4);
+mesh(H);
+title('homomorphic filter');
+
+x=dd.*H;
+real_x=abs(ifft(x));
+subplot(2,3,5), imshow(real_x), title('inverse fourier transform');
+
+Final=exp(real_x);
+subplot(2,3,6), imshow(uint8(Final)), title('filtered image');

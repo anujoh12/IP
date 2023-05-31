@@ -1,0 +1,13 @@
+clc;
+clear all;
+
+a=imread('F:\MScIT - II\IPCV-4.1.2-win64-61-bin\IPCV\images\lena.png');
+b=double(a);
+
+for i=1:8
+    f=bitget(b,i)
+    subplot(2,4,i);
+    imshow(f);
+    title("bit plane"+string(i));
+    title("Hardika Devlekar MLDC 01");
+end
